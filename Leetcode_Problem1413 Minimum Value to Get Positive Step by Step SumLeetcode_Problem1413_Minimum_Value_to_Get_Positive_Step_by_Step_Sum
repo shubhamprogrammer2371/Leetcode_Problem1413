@@ -1,0 +1,80 @@
+int minStartValue(int* nums, int numsSize){
+    for( int i = 1 ; i < 2000 ; i++)
+    {
+        int start_value = i;
+        for( int j = 0 ; j < numsSize ; j++)
+        {
+            start_value += nums[j];
+            if(start_value < 1)
+                break;
+            if((start_value > 0) && (j == numsSize - 1))
+                return i;
+        }
+    }
+    return 0;
+}
+
+
+------------------------------------------------------------------------------------
+
+
+int minStartValue(int* nums, int numsSize){
+    int prev_sum = nums[0] ,  lowest = prev_sum;
+    for ( int i = 1; i < numsSize; i++)
+    {
+        prev_sum += nums[i];
+        lowest = (prev_sum < lowest) ? prev_sum : lowest;
+    }
+    return (lowest < 0) ? abs(lowest) + 1 : 1;
+}
+
+
+
+----------------------------------------------------------------------------------
+
+
+int minStartValue(int* nums, int numsSize){
+    int c = 1 , res = 1 , i = 0;
+    while(i < numsSize)
+    {
+        c += nums[i++];
+        if(c < 1)
+        {
+            c = ++res;
+            i = 0;
+        }  
+    }
+    return res;
+}
+
+
+---------------------------------------------------------------------------------
+
+
+
+int low;
+int calc_sum (int* a, int N, int sum)
+{
+    int ret;
+    if (N == 0)
+        return 0;
+    sum += a[0];
+    low = (sum < low) ? sum : low;
+    ret = calc_sum(&a[1], N-1, sum);
+    return (ret < low) ? ret : low;
+}
+
+int minStartValue(int* nums, int numsSize)
+{
+    /*
+    Algo:
+
+    0. low = 1
+    1. Calculate sum recursively. 
+    2. If current sum < low then low = sum;
+    3. If low < 0 then return 1 - low
+    4. else return 1
+    */
+    low = 1;
+    return (calc_sum(&nums[0], numsSize, 0) > 0) ? 1 : 1 - calc_sum(&nums[0], numsSize, 0);
+}
